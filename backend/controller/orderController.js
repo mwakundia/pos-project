@@ -1,6 +1,8 @@
-const { Order } = require('../models/orderModel');
+const db = require('../models/dbConnect');
 
-exports.getAllOrders = async (req, res) => {
+const Order = db.order;
+
+const getAllOrders = async (req, res, next) => {
     try {
         const orders = await Order.findAll();
         res.json(orders);
@@ -9,7 +11,7 @@ exports.getAllOrders = async (req, res) => {
     }
 };
 
-exports.getOrderById = async (req, res) => {
+const getOrderById = async (req, res, next) => {
     try {
         const order = await Order.findByPk(req.params.id);
         if (order) {
@@ -22,7 +24,7 @@ exports.getOrderById = async (req, res) => {
     }
 };
 
-exports.createOrder = async (req, res) => {
+const createOrder = async (req, res, next) => {
     try {
         const order = await Order.create(req.body);
         res.status(201).json(order);
@@ -31,7 +33,7 @@ exports.createOrder = async (req, res) => {
     }
 };
 
-exports.updateOrder = async (req, res) => {
+const updateOrder = async (req, res, next) => {
     try {
         const order = await Order.findByPk(req.params.id);
         if (order) {
@@ -45,7 +47,7 @@ exports.updateOrder = async (req, res) => {
     }
 };
 
-exports.deleteOrder = async (req, res) => {
+const deleteOrder = async (req, res, next) => {
     try {
         const order = await Order.findByPk(req.params.id);
         if (order) {
@@ -57,4 +59,12 @@ exports.deleteOrder = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while deleting the order' });
     }
+};
+
+module.exports = {
+    getAllOrders,
+    getOrderById,
+    createOrder,
+    updateOrder,
+    deleteOrder
 };

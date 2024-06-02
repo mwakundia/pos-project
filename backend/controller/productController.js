@@ -1,6 +1,7 @@
-const { Product } = require('../models/productModel');
+const db = require('../models/dbConnect');
+const Product = db.product;  // Correct declaration of Product
 
-exports.getAllProducts = async (req, res) => {
+const getAllProducts = async (req, res, next) => {
     try {
         const products = await Product.findAll();
         res.json(products);
@@ -9,7 +10,7 @@ exports.getAllProducts = async (req, res) => {
     }
 };
 
-exports.getProductById = async (req, res) => {
+const getProductById = async (req, res, next) => {
     try {
         const product = await Product.findByPk(req.params.id);
         if (product) {
@@ -18,11 +19,11 @@ exports.getProductById = async (req, res) => {
             res.status(404).json({ error: 'Product not found' });
         }
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while fetching the product' });
+        res.status500.json({ error: 'An error occurred while fetching the product' });
     }
 };
 
-exports.createProduct = async (req, res) => {
+const createProduct = async (req, res, next) => {
     try {
         const product = await Product.create(req.body);
         res.status(201).json(product);
@@ -31,7 +32,7 @@ exports.createProduct = async (req, res) => {
     }
 };
 
-exports.updateProduct = async (req, res) => {
+const updateProduct = async (req, res, next) => {
     try {
         const product = await Product.findByPk(req.params.id);
         if (product) {
@@ -45,7 +46,7 @@ exports.updateProduct = async (req, res) => {
     }
 };
 
-exports.deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res, next) => {
     try {
         const product = await Product.findByPk(req.params.id);
         if (product) {
@@ -57,4 +58,12 @@ exports.deleteProduct = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while deleting the product' });
     }
+};
+
+module.exports = {
+    getAllProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct
 };

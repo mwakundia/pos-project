@@ -1,23 +1,22 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/dbConfig');
-
+module.exports = ( sequelize, DataTypes ) => {
 const Order = sequelize.define('Order', {
-  user: {
-    type: DataTypes.STRING,
-    allowNull: false
+  user_id:{
+    type: DataTypes.INTEGER,
+    foreignKey: true,
   },
   products: {
     type: DataTypes.JSON,
-    allowNull: false
+    allowNull: false,
   },
   totalAmount: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: false,
   },
   paymentStatus: {
     type: DataTypes.STRING,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 });
 
-module.exports = Order;
+return Order;
+}

@@ -3,12 +3,11 @@ import { UserContext } from '../contexts/UserContext';
 import { ProductContext } from '../contexts/ProductContext';
 import { OrderContext } from '../contexts/OrderContext';
 import ProductList from './ProductList';
-// Import other components or utilities as needed
+import OrderList from './OrderList';
+import UserManagement from './UserManagement';
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
-  const { products } = useContext(ProductContext);
-  const { orders } = useContext(OrderContext);
 
   return (
     <div>
@@ -20,13 +19,12 @@ const Dashboard = () => {
       </div>
       <div>
         <h3>Orders</h3>
-        {/* Render a list of orders or a component that handles this */}
+        <OrderList />
       </div>
       <div>
         <h3>User Management</h3>
-        {/* Render a user management component if needed */}
+        <UserManagement />
       </div>
-      {/* Add more sections or components as needed */}
     </div>
   );
 };

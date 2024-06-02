@@ -1,23 +1,27 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/dbConfig');
-
+module.exports = ( sequelize, DataTypes ) => {
 const Product = sequelize.define('Product', {
-  name: {
+  product_id:{
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  product_name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
   },
   price: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: false,
   },
   inventoryQuantity: {
     type: DataTypes.INTEGER,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 });
 
-module.exports = Product;
+return Product;
+}

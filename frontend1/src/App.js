@@ -1,7 +1,7 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ProductProvider } from './contexts/ProductContext';
-import { UserProvider } from './contexts/UserContext';
 import { OrderProvider } from './contexts/OrderContext';
 import ProductList from './components/ProductList';
 import Login from './components/Login';

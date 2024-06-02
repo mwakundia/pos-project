@@ -1,8 +1,14 @@
-const { User } = require('../models/userModel');
+const db = require('../models/dbConnect');
+const createError = require('http-errors');
+const { signAccessToken } = require('../helpers/jwtHelper');
+const { authSchema } = require('../helpers/validateSchema');
+const { invalid } = require('joi');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-exports.register = async (req, res) => {
+const User = db.user;
+
+const addUser = async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -13,12 +19,21 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.findAll();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while fetching users' });
+    }
+};
+
+const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
         if (user && await bcrypt.compare(password, user.password)) {
-            const token = jwt.sign({ id: user.id }, 'your_jwt_secret');
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
             res.json({ token });
         } else {
             res.status(401).json({ error: 'Invalid email or password' });
@@ -28,7 +43,7 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id);
         res.json(user);
@@ -37,7 +52,7 @@ exports.getUserProfile = async (req, res) => {
     }
 };
 
-exports.updateUserProfile = async (req, res) => {
+const updateUserProfile = async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id);
         if (user) {
@@ -49,4 +64,12 @@ exports.updateUserProfile = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: 'An error occurred while updating the user profile' });
     }
+};
+
+module.exports = {
+    addUser,
+    getAllUsers,
+    loginUser,
+    getUserProfile,
+    updateUserProfile
 };
